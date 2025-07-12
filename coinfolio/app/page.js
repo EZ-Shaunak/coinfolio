@@ -1,11 +1,15 @@
-import Image from "next/image";
+import Overview from './components/Overview';
 
 export default function Home() {
   return (
-    <div >
-      <main>
-        <h1>Welcome to CoinFolio!</h1>
-      </main>
-    </div>
+    <main>
+      <h2>Portfolio Overview</h2>
+
+      <Overview />
+
+      <div className="details">
+        <div className="divider"></div>
+      </div>
+    </main>
   );
 }
