@@ -2,7 +2,7 @@ const Footer = () => {
     return (
         <footer>
             <p>
-                Copyright &copy; Coinfolio 2023. All rights reserved.
+                Copyright &copy; Coinfolio 2025. All rights reserved.
             </p>
         </footer>
     );

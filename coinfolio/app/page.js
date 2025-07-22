@@ -1,6 +1,13 @@
 "use client";
 import { useState, useEffect } from 'react';
+
+// Components
 import Overview from './components/Overview';
+import Values from './components/Values';
+import Holdings from './components/Holdings';
+import Assets from './components/Assets';
+
+//Data Snapshots
 import marketsSnapshot from './snapshots/markets.json';
 import tokensSnapshot from './snapshots/tokens.json';
 import pricesSnapshot from './snapshots/prices.json';
@@ -69,8 +76,16 @@ export default function Home() {
         tokens={tokens}
       />
 
+
       <div className="details">
         <div className="divider"></div>
+
+
+
+        <Holdings />
+        <Values />
+        <Assets />
+
       </div>
     </main>
   );
