@@ -82,7 +82,7 @@ export default function Home() {
 
 
 
-        <Holdings />
+        <Holdings tokens={tokens} />
         <Values />
         <Assets />
 
