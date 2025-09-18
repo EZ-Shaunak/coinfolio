@@ -83,7 +83,7 @@ export default function Home() {
 
 
         <Holdings tokens={tokens} />
-        <Values />
+        <Values tokens={tokens}/>
         <Assets />
 
       </div>
