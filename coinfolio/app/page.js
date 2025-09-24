@@ -83,8 +83,8 @@ export default function Home() {
 
 
         <Holdings tokens={tokens} />
-        <Values tokens={tokens}/>
-        <Assets />
+        <Values tokens={tokens} />
+        <Assets tokens={tokens} setTokens={setTokens} />
 
       </div>
     </main>
