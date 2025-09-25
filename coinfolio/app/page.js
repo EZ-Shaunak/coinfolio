@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { ethers } from 'ethers';
 
 // Components
 import Overview from './components/Overview';
@@ -53,12 +54,19 @@ export default function Home() {
     const pricesResponse = await fetch(ROOT_URL + PRICES_ENDPOINT + PRICES_ARGUMENTS)
     const prices = (await pricesResponse.json()).prices
 
-    const balanceSnapshot = {
-      'ethereum': 14.9595959595959595,
-      'usd-coin': 41.566528,
-    }
+    // Fetch balance
+    const ETH_RPC_URL = "https://rpc.ankr.com/eth/ddbcc193a8fa262599b9d1e915d6352bf32c868b337fb08d2cd237b9cc637b45"
+    const PROVIDER = new ethers.JsonRpcProvider(ETH_RPC_URL)
+    const ABI = ["function balanceOf(address) view returns (uint)"]
 
-    const balance = balanceSnapshot[id];
+    let balance
+
+    if (details) {
+      const contract = new ethers.Contract(details.contract_address, ABI, PROVIDER)
+      balance = Number(ethers.formatUnits(await contract.balanceOf(account), details.decimal_place))
+    } else {
+      balance = Number(ethers.formatUnits(await PROVIDER.getBalance(account), 18))
+    }
 
     const token = {
       id: id,

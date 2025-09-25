@@ -70,7 +70,7 @@ const Token = ({ setIsTokenModalOpen, token }) => {
                     {token.address && (
                         <div>
                             <h4>Contract Address</h4>
-                            <p>{token.address.contract_address}</p>
+                            <p>{token.address}</p>
                         </div>
                     )}
                 </div>
