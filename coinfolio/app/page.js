@@ -19,22 +19,40 @@ export default function Home() {
   const [tokens, setTokens] = useState([]);
 
   const getMarkets = async () => {
-    setMarkets(marketsSnapshot);
+    const ROOT_URL = `https://api.coingecko.com/api/v3`
+    const ENDPOINT = `/coins/markets`
+    const AMOUNT = 25
+    const ARGUMENTS = `?vs_currency=usd&category=ethereum-ecosystem&order=market_cap_desc&per_page=${AMOUNT}&page=1&sparkline=false&locale=en`
+
+    const response = await fetch(ROOT_URL + ENDPOINT + ARGUMENTS)
+
+    setMarkets(await response.json())
   }
 
   const getToken = async () => {
-    const id = trackedTokens[trackedTokens.length - 1];
+    // Fetch token info and sew it together
+    const id = trackedTokens[trackedTokens.length - 1]
 
-    //Token market details
-    const tokenMarketDetails = markets.find(market => market.id === id);
+    // Market data
+    const market = markets.find((market) => market.id === id)
 
-    //Token address and object
-    const tokenAddressDetails = tokensSnapshot.find(token => token.id === id);
-    const tokenAddress = tokenAddressDetails.detail_platforms.ethereum;
+    // Fetch token details via API request (we just need the contract address)
+    const ROOT_URL = `https://api.coingecko.com/api/v3`
+    const TOKEN_ENDPOINT = `/coins/${id}`
+    const TOKEN_ARGUMENTS = `?tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`
 
-    //Token Prices
-    const tokenPrices = pricesSnapshot[id]
-    //User Token Balance
+    const tokenResponse = await fetch(ROOT_URL + TOKEN_ENDPOINT + TOKEN_ARGUMENTS)
+    const tokenSnapshot = await tokenResponse.json()
+
+    const details = tokenSnapshot.detail_platforms.ethereum
+
+    // Fetch token 7 day average prices via API request
+    const PRICES_ENDPOINT = `/coins/${id}/market_chart/`
+    const PRICES_ARGUMENTS = `?vs_currency=usd&days=7&interval=daily`
+
+    const pricesResponse = await fetch(ROOT_URL + PRICES_ENDPOINT + PRICES_ARGUMENTS)
+    const prices = (await pricesResponse.json()).prices
+
     const balanceSnapshot = {
       'ethereum': 14.9595959595959595,
       'usd-coin': 41.566528,
@@ -44,11 +62,11 @@ export default function Home() {
 
     const token = {
       id: id,
-      tokenMarketDetails: tokenMarketDetails,
-      address: tokenAddress ? tokenAddress : null,
-      prices: tokenPrices,
+      tokenMarketDetails: market,
+      address: details ? details.contract_address : null,
+      prices: prices,
       balance: balance,
-      value: balance * tokenMarketDetails.current_price,
+      value: balance * market.current_price,
     }
 
     setTokens([...tokens, token]);
